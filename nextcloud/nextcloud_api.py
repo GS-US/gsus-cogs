@@ -26,8 +26,6 @@ class NextCloudAPI:
         url = self.BASE_URL.format(endpoint=endpoint.lstrip('/'))
         headers = self.get_headers() | (headers or {})
 
-        print(headers)
-        print(data)
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=headers, data=data) as resp:
                 resp.raise_for_status()

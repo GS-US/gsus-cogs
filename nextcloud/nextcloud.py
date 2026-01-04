@@ -1,6 +1,8 @@
 from io import BytesIO
+from typing import Optional
 from urllib.error import HTTPError
 
+import discord
 from redbot.core.utils.chat_formatting import inline
 
 from nextcloud.nextcloud_api import NextCloudAPI
@@ -54,7 +56,7 @@ class NextCloud(CogWithEndpoints):
                     'account_creation': member.created_at.timestamp(),
                     'roles': [role.id for role in member.roles],
                 },
-                'status': 404
+                'status': 200
             }
 
     @commands.group()
@@ -68,19 +70,22 @@ class NextCloud(CogWithEndpoints):
         ...
 
     @account.command()
-    async def new(self, ctx):
+    async def new(self, ctx, user: Optional[discord.User]):
         """Create a new account."""
+        user = user or ctx.author
+
         try:
-            resp = await self.api.create_new_account(ctx.author.id)
+            resp = await self.api.create_new_account(user.id)
         except HTTPError as e:
             if e.response.status_code == 409:
                 await ctx.send("You already have an account.")
             raise
 
+        print(resp)
         username = resp['username']
         password = resp['password']
         await ctx.tick()
-        await ctx.author.send(
+        await user.send(
             f"Your account has been created.\n\n"
             f"Your username is {inline(username)} and your password is {inline(password)}.")
 
