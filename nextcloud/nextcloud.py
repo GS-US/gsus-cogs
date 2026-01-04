@@ -22,6 +22,8 @@ class NextCloud(CogWithEndpoints):
         self.api = None
 
     async def cog_load(self):
+        await super().cog_load()
+
         keys = await self.bot.get_shared_api_tokens('nextcloud')
         if 'secret' not in keys:
             raise ValueError("NextCloud cog requires 'secret' shared_api_token. Set this via [p]set api")
@@ -42,8 +44,9 @@ class NextCloud(CogWithEndpoints):
     @endpoint("user_info")
     async def user_info(self, user_id: int):
         """Get info about a user."""
-        member = await self.bot.get_guild(self.GSUS_SERVER_ID).fetch_member(user_id)
-        if member is None:
+        try:
+            member = await self.bot.get_guild(self.GSUS_SERVER_ID).fetch_member(user_id)
+        except discord.NotFound:
             return {
                 'response': {'error': 'Member not in GSUS server.'},
                 'status': 404
