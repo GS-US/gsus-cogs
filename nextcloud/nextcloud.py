@@ -1,6 +1,6 @@
 from io import BytesIO
 from typing import Optional
-from urllib.error import HTTPError
+from aiohttp import ClientResponseError
 
 import discord
 from redbot.core.utils.chat_formatting import inline
@@ -25,9 +25,11 @@ class NextCloud(CogWithEndpoints):
         await super().cog_load()
 
         keys = await self.bot.get_shared_api_tokens('nextcloud')
-        if 'secret' not in keys:
-            raise ValueError("NextCloud cog requires 'secret' shared_api_token. Set this via [p]set api")
-        self.api = NextCloudAPI(keys['secret'])
+        if 'nextcloud_secret' not in keys:
+            raise ValueError("NextCloud cog requires 'nextcloud_secret' shared_api_token. Set this via [p]set api")
+        if 'windmill_secret' not in keys:
+            raise ValueError("NextCloud cog requires 'windmill_secret' shared_api_token. Set this via [p]set api")
+        self.api = NextCloudAPI(keys['nextcloud_secret'], keys['windmill_secret'])
 
     async def red_get_data_for_user(self, *, user_id):
         """Get a user's personal data."""
@@ -79,10 +81,16 @@ class NextCloud(CogWithEndpoints):
 
         try:
             resp = await self.api.create_new_account(user.id)
-        except HTTPError as e:
-            if e.response.status_code == 409:
+        except ClientResponseError as e:
+            if e.status == 409:
                 await ctx.send("You already have an account.")
-            raise
+                return
+            if e.status == 500:
+                await ctx.send("Internal server error, please contact a member of the Tech Team.")
+                return
+        except Exception:
+            await ctx.send("The bot has died :( Please contact a member of the Tech Team")
+            return 
 
         print(resp)
         username = resp['username']
