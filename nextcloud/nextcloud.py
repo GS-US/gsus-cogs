@@ -25,11 +25,11 @@ class NextCloud(CogWithEndpoints):
         await super().cog_load()
 
         keys = await self.bot.get_shared_api_tokens('nextcloud')
-        if 'nextcloudSecret' not in keys:
-            raise ValueError("NextCloud cog requires 'nextcloudSecret' shared_api_token. Set this via [p]set api")
-        if 'windmillSecret' not in keys:
-            raise ValueError("NextCloud cog requires 'windmillSecret' shared_api_token. Set this via [p]set api")
-        self.api = NextCloudAPI(keys['nextcloudSecret'], keys['windmillSecret'])
+        if 'nextcloud_secret' not in keys:
+            raise ValueError("NextCloud cog requires 'nextcloud_secret' shared_api_token. Set this via [p]set api")
+        if 'windmill_secret' not in keys:
+            raise ValueError("NextCloud cog requires 'windmill_secret' shared_api_token. Set this via [p]set api")
+        self.api = NextCloudAPI(keys['nextcloud_secret'], keys['windmill_secret'])
 
     async def red_get_data_for_user(self, *, user_id):
         """Get a user's personal data."""
