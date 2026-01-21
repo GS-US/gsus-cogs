@@ -1,6 +1,5 @@
 from io import BytesIO
 from typing import Optional
-from urllib.error import HTTPError
 from aiohttp import ClientResponseError
 
 import discord
