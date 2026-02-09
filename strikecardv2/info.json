@@ -1,0 +1,23 @@
+{
+  "author": [
+    "Aradia Megido#2552"
+  ],
+  "description": "A cog to integrate with the new strike card.",
+  "end_user_data_statement": "No personal data is stored.",
+  "install_msg": "Strike card cog installed.",
+  "short": "Strike Card V2 integration",
+  "min_bot_version": "3.4.0",
+  "max_bot_version": "0.0.0",
+  "min_python_version": [
+    3,
+    8,
+    1
+  ],
+  "hidden": true,
+  "disabled": false,
+  "required_cogs": {
+    "apicog": "https://github.com/TinyScarletUnicorn/core-cogs"
+  },
+  "requirements": [],
+  "tags": []
+}
