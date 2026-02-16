@@ -58,8 +58,8 @@ class NextCloud(CogWithEndpoints):
                 'response': {
                     'avatar_url': member.avatar.url if member.avatar else None,
                     'name': member.name,
-                    'account_creation': member.created_at.timestamp(),
-                    'roles': [role.id for role in member.roles],
+                    'account_creation': str(member.created_at.timestamp()),
+                    'roles': [str(role.id) for role in member.roles],
                 },
                 'status': 200
             }
