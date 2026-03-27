@@ -97,8 +97,11 @@ class NextCloud(CogWithEndpoints):
         password = resp['password']
         await ctx.tick()
         await user.send(
-            f"Your account has been created.\n\n"
-            f"Your username is {inline(username)} and your password is {inline(password)}.")
+            f"""
+            Your gsus.work account has been created however an administrator must review your request before you can access Nextcloud.
+            Your username is `{username}` and your password is `{password}`.
+            Once you receive a (second) confirmation from a Nextcloud administrator, use the above username and initial password to login at [https://gsus.work](https://gsus.work)
+            """.strip())
 
 
 
